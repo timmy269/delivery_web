@@ -1,71 +1,52 @@
-import cartModel from "../models/cartModel.js";
+import userModel from "../models/userModel.js"
 
-// Thêm món vào giỏ hàng
+//add items to user cart
 const addToCart = async (req, res) => {
   try {
-    const { userId, foodId, quantity } = req.body;
-
-    let cart = await cartModel.findOne({ userId });
-
-    if (!cart) {
-      cart = new cartModel({ userId, items: [] });
+    let userData = await userModel.findById(req.userId);
+    let cartData = await userData.cartData;
+    if (!cartData[req.body.itemId]) {
+      cartData[req.body.itemId] = 1;
     }
-
-    const existingItemIndex = cart.items.findIndex(item => item.food.toString() === foodId);
-
-    if (existingItemIndex > -1) {
-      cart.items[existingItemIndex].quantity += quantity;
-    } else {
-      cart.items.push({ food: foodId, quantity });
+    else {
+      cartData[req.body.itemId] += 1;
     }
-
-    await cart.save();
-    res.json({ success: true, message: "Đã thêm vào giỏ hàng!", cart: cart.items });
+    await userModel.findByIdAndUpdate(req.userId, { cartData })
+    res.json({ success: true, message: "Added to cart" });
   } catch (error) {
     console.log(error);
-    res.status(500).json({ success: false, message: "Lỗi khi thêm vào giỏ hàng!" });
+    res.status(500).json({ success: false, message: "Error" })
   }
-};
+}
 
-// Xóa món khỏi giỏ hàng
+//remove items from user cart
 const removeFromCart = async (req, res) => {
   try {
-    const { userId, foodId } = req.body;
-
-    const cart = await cartModel.findOne({ userId });
-    if (!cart) {
-      return res.status(404).json({ success: false, message: "Không tìm thấy giỏ hàng!" });
+    let userData = await userModel.findById(req.userId);
+    let cartData = await userData.cartData;
+    if (cartData[req.body.itemId] > 0) {
+      cartData[req.body.itemId] -= 1;
     }
-
-    cart.items = cart.items.filter(item => item.food.toString() !== foodId);
-
-    await cart.save();
-    res.json({ success: true, message: "Đã xóa món khỏi giỏ hàng!", cart: cart.items });
+    await userModel.findByIdAndUpdate(req.userId, { cartData });
+    res.json({ success: true, message: "Removed from cart" })
   } catch (error) {
     console.log(error);
-    res.status(500).json({ success: false, message: "Lỗi khi xóa món khỏi giỏ hàng!" });
-  }
-};
+    res.status(500).json({ success: false, message: "Error" })
 
-// Lấy giỏ hàng
+  }
+
+}
+// fetch user cart data
 const getCart = async (req, res) => {
   try {
-    const { userId } = req.body;
-
-    const cart = await cartModel.findOne({ userId }).populate("items.food");
-    if (!cart) {
-      return res.status(404).json({ success: false, message: "Không tìm thấy giỏ hàng!" });
+    let userData = await userModel.findById(req.userId);
+    if (!userData) {
+      return res.status(404).json({ success: false, message: "User not found" });
     }
-
-    const total = cart.items.reduce((sum, item) => {
-      return sum + item.food.price * item.quantity;
-    }, 0);
-
-    res.json({ success: true, cart: cart.items, total });
+    res.json({ success: true, cartData: userData.cartData })
   } catch (error) {
     console.log(error);
-    res.status(500).json({ success: false, message: "Lỗi khi lấy giỏ hàng!" });
+    res.status(500).json({ success: false, message: "Error" })
   }
-};
-
-export { addToCart, removeFromCart, getCart };
+}
+export { addToCart, removeFromCart, getCart }

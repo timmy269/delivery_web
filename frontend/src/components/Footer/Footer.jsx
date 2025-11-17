@@ -7,33 +7,33 @@ const Footer = () => {
     <div className='footer' id='footer'>
       <div className="footer-content">
         <div className="footer-content-left">
-          <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
+          <p>Chúng tôi cam kết mang đến những trải nghiệm ẩm thực tuyệt vời với các món ăn ngon miệng được chế biến từ những nguyên liệu tươi ngon nhất. Đội ngũ chuyên môn của chúng tôi luôn sẵn sàng phục vụ bạn với dịch vụ tốt nhất.
           </p>
           <div className="footer-social-icons">
             <img src={assets.facebook_icon} alt="" />
             <img src={assets.twitter_icon} alt="" />
-            <img src={assets.instagram_icon} alt="" />
+            <img src={assets.linkedin_icon} alt="" />
           </div>
         </div>
         <div className="footer-content-center">
-          <h3>Quick Links</h3>
+          <h3>Liên kết nhanh</h3>
           <ul>
-            <li>Home</li> 
-            <li>Menu</li>
-            <li>Delivery</li>
-            <li>Privacy policy</li>
+            <li>Trang chủ</li> 
+            <li>Thực đơn</li>
+            <li>Giao hàng</li>
+            <li>Chính sách bảo mật</li>
           </ul>
         </div>
         <div className="footer-content-right">
-          <h2>GET IN TOUCH</h2>
+          <h2>LIÊN HỆ CHÚNG TÔI</h2>
           <ul>
-            <li>+1-231-323-3145</li>
+            <li>+84-123-456-789</li>
             <li>contact@Timmy.com</li>
           </ul>
         </div>
       </div>
       <hr />
-      <p className='footer-copyright'>&copy; 2024 Timmy. All rights reserved.</p>
+      <p className='footer-copyright'>&copy; 2025 Timmy. Bản quyền đã được bảo lưu.</p>
     </div>
   )
 }

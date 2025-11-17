@@ -10,9 +10,11 @@ import remove_icon_red from './remove_icon_red.png'
 import add_icon_green from './add_icon_green.png'
 import facebook_icon from './facebook_icon.png'
 import twitter_icon from './twitter_icon.png'
-import instagram_icon from './instagram_icon.png'
+import linkedin_icon from './linkedin_icon.png'
+import logout_icon from './logout_icon.png'
 
-import food_1 from './food_1.png'
+
+import food_1 from './food_1.jpg'
 import food_2 from './food_2.jpg'
 import food_3 from './food_3.jpg'
 import food_4 from './food_4.jpg'
@@ -127,7 +129,8 @@ export const assets = {
     add_icon_green,
     facebook_icon,
     twitter_icon,
-    instagram_icon,
+    linkedin_icon,
+    logout_icon
 }
 
 

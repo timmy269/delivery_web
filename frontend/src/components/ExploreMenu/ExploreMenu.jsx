@@ -6,8 +6,8 @@ import { menu_list } from '../../assets/assets'
 const ExploreMenu = ({category,setCategory}) => {
   return (
     <div className='explore-menu' id='explore-menu'>
-      <h1>Explore our menu</h1>
-      <p className='explore-menu-text'>Choose from a diverse featuring a delectable array of dishes craffed with the finest ingredients and culinary expertise. Our mission is to satisfy your cravings and elevate your dining experience, one delicious meal at a time</p>
+      <h1>Khám phá thực đơn</h1>
+      <p className='explore-menu-text'>Lựa chọn từ thực đơn đa dạng với nhiều món ăn hấp dẫn được chế biến từ nguyên liệu hảo hạng và chuyên môn ẩm thực tinh tế. Sứ mệnh của chúng tôi là thỏa mãn cơn thèm ăn và nâng tầm trải nghiệm ẩm thực của bạn, từng bữa ăn ngon miệng một.</p>
       <div className="explore-menu-list">
         {menu_list.map((item, index) => {
           return (
