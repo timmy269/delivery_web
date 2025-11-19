@@ -1,7 +1,7 @@
 import React, { use, useContext, useState } from 'react'
 import './LoginPopup.css'
 import { assets } from '@/assets/assets'
-import { StoreContext } from '../../context/StoreContext';
+import { StoreContext } from '@/Context/StoreContext'
 import axios from 'axios';
 
 
@@ -58,11 +58,11 @@ const LoginPopup = ({ setShowLogin }) => {
         <button type='submit'>{currState === "Sign up" ? "Create account" : "Login"}</button>
         <div className="login-popup-condition">
           <input type="checkbox" required />
-          <p>By continuing, i agree to the terms of user & privacy.</p>
+          <p>Bằng cách tiếp tục, tôi đồng ý với các điều khoản sử dụng và quyền riêng tư.</p>
         </div>
         {currState === "Login"
-          ? <p>Create a new account? <span onClick={() => setCurrState("Sign Up")}>Click here</span></p>
-          : <p>Already have an account? <span onClick={() => setCurrState("Login")}>Login here</span></p>
+          ? <p>Tạo một tài khoản mới? <span onClick={() => setCurrState("Sign Up")}>Click here</span></p>
+          : <p>Đã có tài khoản? <span onClick={() => setCurrState("Login")}>Login here</span></p>
         }
       </form>
     </div>

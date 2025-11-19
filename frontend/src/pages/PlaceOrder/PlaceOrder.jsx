@@ -42,12 +42,15 @@ const PlaceOrder = () => {
       amount: getTotalCartAmount() + 20000
     }
 
-    let response = await axios.post(url + "/api/order/create_payment_url", orderData, { headers: { token } })
-    if (response.data.success) {
-      const { url: vnpayUrl } = response.data;
-      window.location.href = vnpayUrl;
-    } else {
-      alert("Error");
+    try {
+      let response = await axios.post(url + "/api/order/place-momo", orderData, { headers: { token } })
+      if (response.data.success) {
+        window.location.replace(response.data.payUrl);
+      } else {
+        alert("Lỗi: " + response.data.message);
+      }
+    } catch (error) {
+      alert("Đã xảy ra lỗi khi tạo thanh toán.");
     }
   }
 
