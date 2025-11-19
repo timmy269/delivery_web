@@ -44,29 +44,29 @@ const Cart = () => {
       </div>
       <div className="cart-bottom">
         <div className="cart-total">
-          <h2>Cart Total</h2>
+          <h2>Tổng giá</h2>
           <div>
             <div className="cart-total-details">
-              <p>Subtotal</p>
+              <p>Tổng phụ</p>
               <p>{getTotalCartAmount()}VND</p>
             </div>
             <div className="cart-total-details">
-              <p>Delivery Fee</p>
+              <p>Phí vận chuyển</p>
               <p>{getTotalCartAmount() === 0 ? 0 : 20000}VND</p>
             </div>
             <div className="cart-total-details">
-              <b>Total</b>
+              <b>Tổng</b>
               <b>{getTotalCartAmount() === 0 ? 0 : getTotalCartAmount() + 20000}VND</b>
             </div>
           </div>
-          <button onClick={() => navigate('/order')}>PROCEED TO CHECKOUT</button>
+          <button onClick={() => navigate('/order')}>TIẾN HÀNH THANH TOÁN</button>
         </div>
         <div className="cart-promocode">
           <div>
-            <p>If you have a promo code, Enter it here</p>
+            <p>Nếu bạn có mã khuyến mại, hãy nhập vào đây</p>
             <div className='cart-promocode-input'>
               <input type="text" placeholder='Enter promo code' />
-              <button>Submit</button>
+              <button>Enter</button>
             </div>
           </div>
         </div>
