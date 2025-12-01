@@ -12,18 +12,18 @@ const userOrders = async (req, res) => {
         res.json({ success: true, data: orders });
     } catch (error) {
         console.log(error);
-        res.status(500).json({ success: false, message: "Error fetching user orders" });
+        res.status(500).json({ success: false, message: "Lỗi khi lấy đơn hàng của người dùng" });
     }
 };
 
 // Lấy tất cả đơn hàng 
-const listOrders = async (req, res) => {
+const listOrders = async (_req, res) => {
     try {
         const orders = await orderModel.find({});
         res.json({ success: true, data: orders });
     } catch (error) {
         console.log(error);
-        res.status(500).json({ success: false, message: "Error fetching all orders" });
+        res.status(500).json({ success: false, message: "Lỗi khi lấy tất cả đơn hàng" });
     }
 };
 
@@ -31,10 +31,10 @@ const listOrders = async (req, res) => {
 const updateStatus = async (req, res) => {
     try {
         await orderModel.findByIdAndUpdate(req.body.orderId, { status: req.body.status });
-        res.json({ success: true, message: "Status Updated" });
+        res.json({ success: true, message: "Trạng thái đã được cập nhật" });
     } catch (error) {
         console.log(error);
-        res.status(500).json({ success: false, message: "Error updating status" });
+        res.status(500).json({ success: false, message: "Lỗi khi cập nhật trạng thái" });
     }
 };
 
@@ -46,7 +46,7 @@ const placeOrderMomo = async (req, expressRes) => {
             items: req.body.items,
             amount: req.body.amount,
             address: req.body.address,
-            status: "Pending Payment",
+            status: "Chờ thanh toán",
         });
         await newOrder.save();
 
@@ -65,7 +65,7 @@ const placeOrderMomo = async (req, expressRes) => {
         const orderInfo = `Thanh toán đơn hàng: ${orderId}`;
         // ********************************************************
 
-        const redirectUrl = "http://localhost:3000/verify";
+        const redirectUrl = "http://localhost:5173/verify";
         const ipnUrl = "http://localhost:4000/api/order/momo-ipn";
         const extraData = '';
         const requestType = "payWithMethod";
@@ -130,19 +130,19 @@ const placeOrderMomo = async (req, expressRes) => {
                     } else {
                         // Xử lý lỗi từ MoMo
                         console.error(`MoMo API Error: ${jsonBody.message}`);
-                        expressRes.status(500).json({ success: false, message: `MoMo error: ${jsonBody.message}` });
+                        expressRes.status(500).json({ success: false, message: `Lỗi MoMo: ${jsonBody.message}` });
                     }
                 } catch (e) {
-                    console.error("Error parsing MoMo response:", e);
-                    expressRes.status(500).json({ success: false, message: "Error processing MoMo response" });
+                    console.error("Lỗi xử lý phản hồi từ MoMo:", e);
+                    expressRes.status(500).json({ success: false, message: "Lỗi xử lý phản hồi từ MoMo" });
                 }
             });
         });
 
         apiReq.on('error', (e) => {
-            console.error(`Problem with MoMo request: ${e.message}`);
+            console.error(`Sự cố với yêu cầu MoMo: ${e.message}`);
             // Gửi lỗi về client
-            expressRes.status(500).json({ success: false, message: "Error connecting to MoMo payment gateway" });
+            expressRes.status(500).json({ success: false, message: "Lỗi kết nối với cổng thanh toán MoMo" });
         });
 
         console.log("Sending....")
@@ -161,14 +161,14 @@ const momoIPN = async (req, res) => {
     // TODO: Thêm bước xác thực chữ ký từ MoMo để bảo mật
     try {
         if (resultCode === 0) { // Thanh toán thành công
-            await orderModel.findByIdAndUpdate(orderId, { status: "Food Processing", payment: true });
+            await orderModel.findByIdAndUpdate(orderId, { status: "Đang xử lý", payment: true });
         } else { // Thanh toán thất bại
-            await orderModel.findByIdAndUpdate(orderId, { status: "Payment Failed" });
+            await orderModel.findByIdAndUpdate(orderId, { status: "Thanh toán thất bại" });
         }
         // Phản hồi 204 cho MoMo để xác nhận đã nhận IPN
         res.status(204).send();
     } catch (error) {
-        console.log("Error processing MoMo IPN:", error);
+        console.log("Lỗi xử lý MoMo IPN:", error);
         res.status(500).send();
     }
 }
@@ -176,22 +176,21 @@ const momoIPN = async (req, res) => {
 const verifyOrder = async (req, res) => {
     const { resultCode, orderId } = req.body;
 
-    // Lưu ý: MoMo trả về resultCode là chuỗi ('0', '9000', v.v.)
     try {
         if (resultCode === '0') { // Thanh toán thành công
             // Cập nhật trạng thái đơn hàng: Đã thanh toán và đang xử lý
-            await orderModel.findByIdAndUpdate(orderId, { status: "Food Processing", payment: true });
-            res.json({ success: true, message: "Payment Successful" });
+            await orderModel.findByIdAndUpdate(orderId, { status: "Đang xử lý", payment: true });
+            res.json({ success: true, message: "Thanh toán thành công" });
         } else { // Thanh toán thất bại hoặc bị hủy
             // Cập nhật trạng thái đơn hàng: Thanh toán thất bại
-            await orderModel.findByIdAndUpdate(orderId, { status: "Payment Failed" });
+            await orderModel.findByIdAndUpdate(orderId, { status: "Thanh toán thất bại" });
             res.json({
-                success: false, message: "Payment Failed"
+                success: false, message: "Thanh toán thất bại"
             });
         }
     } catch (error) {
-        console.error("Error verifying payment:", error);
-        res.status(500).json({ success: false, message: "Internal server error during verification" });
+        console.error("Lỗi xác minh thanh toán:", error);
+        res.status(500).json({ success: false, message: "Lỗi máy chủ nội bộ trong quá trình xác minh" });
     }
 }
 

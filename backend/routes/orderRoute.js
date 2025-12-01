@@ -9,7 +9,7 @@ orderRouter.get("/list", listOrders);
 orderRouter.post("/status", updateStatus);
 orderRouter.post("/place-momo", authMiddleware, placeOrderMomo);
 orderRouter.post("/momo-ipn", momoIPN); 
-orderRouter.post("/verify", authMiddleware, verifyOrder); 
+orderRouter.post("/verify", verifyOrder); 
 
 
 export default orderRouter;

@@ -1,8 +1,6 @@
 import foodModel from "../models/foodModel.js";
 import fs from 'fs'
 
-
-//add food item
 const addFood = async (req, res) => {
     let image_filename = `${req.file.filename}`;
 
@@ -24,7 +22,6 @@ const addFood = async (req, res) => {
     }
 }
 
-//all food list
 
 const listFood = async (req, res) => {
     try {
@@ -35,7 +32,6 @@ const listFood = async (req, res) => {
     }
 }
 
-//remove food item
 const removeFood = async (req, res) => {
     try {
         const food = await foodModel.findById(req.body.id);
@@ -48,4 +44,24 @@ const removeFood = async (req, res) => {
         res.json({ success: false, message: "Error" })
     }
 }
-export { addFood, listFood, removeFood }
+
+const getFoodById = async (req, res) => {
+    try {
+        const foodId = req.params.id;
+        const food = await foodModel
+            .findById(foodId)
+            .populate("category") 
+            .exec();
+
+        if (!food) {
+            return res.status(404).json({ message: "Không tìm thấy món ăn" });
+        }
+
+        res.status(200).json({ success: true, data: food });
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ message: "Lỗi server" });
+    }
+};
+
+export { addFood, listFood, removeFood, getFoodById }

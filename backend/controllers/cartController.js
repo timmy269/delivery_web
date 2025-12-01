@@ -3,21 +3,26 @@ import userModel from "../models/userModel.js"
 //add items to user cart
 const addToCart = async (req, res) => {
   try {
+    const { itemId, quantity = 1 } = req.body; // lấy quantity, mặc định 1 nếu không truyền
+
     let userData = await userModel.findById(req.userId);
-    let cartData = await userData.cartData;
-    if (!cartData[req.body.itemId]) {
-      cartData[req.body.itemId] = 1;
+    let cartData = userData.cartData || {};
+
+    if (!cartData[itemId]) {
+      cartData[itemId] = quantity;
+    } else {
+      cartData[itemId] += quantity;
     }
-    else {
-      cartData[req.body.itemId] += 1;
-    }
-    await userModel.findByIdAndUpdate(req.userId, { cartData })
+
+    await userModel.findByIdAndUpdate(req.userId, { cartData });
+
     res.json({ success: true, message: "Added to cart" });
   } catch (error) {
     console.log(error);
-    res.status(500).json({ success: false, message: "Error" })
+    res.status(500).json({ success: false, message: "Error" });
   }
-}
+};
+
 
 //remove items from user cart
 const removeFromCart = async (req, res) => {

@@ -73,3 +73,25 @@
     padding: 6px;
     border-radius: 50px;
 }
+
+.detail-btn {
+    display: flex;
+    align-items: center;
+    column-gap: 2rem;
+    background-color: white;
+    border: 1px solid black;
+    color: black;
+    padding: 0.6rem;
+    justify-content: center;
+    column-gap: 0.5rem;
+    cursor: pointer;
+    border-radius: 0.3rem;
+    transition: 0.4s all;
+    font-size: 0.9rem;
+}
+
+.detail-btn:hover {
+    background-color: #fff;
+    color: black;
+    box-shadow: 5px 5px 5px -6px;
+}

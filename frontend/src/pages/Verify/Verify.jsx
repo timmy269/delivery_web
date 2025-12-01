@@ -1,64 +1,129 @@
-import React, { useContext, useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import axios from 'axios';
-import { StoreContext } from '../../Context/StoreContext';
 
 const Verify = () => {
-
-    // Lấy tham số đúng từ URL
-    const [searchParams, setSearchParams] = useSearchParams();
-    const resultCode = searchParams.get("resultCode"); // Lấy resultCode (0 là thành công)
+    const [searchParams] = useSearchParams();
+    const resultCode = searchParams.get("resultCode");
     const orderId = searchParams.get("orderId");
-
-    // Lấy url và token
-    const { url, token } = useContext(StoreContext);
     const navigate = useNavigate();
 
+    const [status, setStatus] = useState('loading'); // 'loading' | 'success' | 'failed'
+
     const verifyPayment = async () => {
-        // Kiểm tra an toàn: Nếu không có orderId hoặc resultCode, thoát.
         if (!orderId || !resultCode) {
-            console.error("Thiếu tham số MoMo.");
-            return navigate("/");
+            setStatus('failed');
+            return;
         }
 
         try {
-            // Gửi resultCode và orderId lên server (KÈM TOKEN)
             const response = await axios.post(
-                url + "/api/order/verify",
-                { resultCode, orderId },
-                { headers: { token } } // PHẢI GỬI TOKEN LÊN
+                "http://localhost:4000/api/order/verify",
+                {
+                    resultCode,
+                    orderId
+                }
             );
 
-            console.log("Phản hồi từ Backend (Verify):", response.data);
+            console.log("Response verify:", response.data);
 
             if (response.data.success) {
-                // Thành công: Chuyển hướng đến trang đơn hàng của tôi
-                navigate("/myorders");
+                setStatus('success');
             } else {
-                // Thất bại: Chuyển hướng về trang chủ
-                navigate("/");
+                setStatus('failed');
             }
         } catch (error) {
-            console.error("LỖI XÁC NHẬN THANH TOÁN (AXIOS):", error);
-            // Chuyển hướng về trang chủ nếu gặp lỗi mạng hoặc 401/500
-            navigate("/");
+            console.error("Verify Error:", error);
+            setStatus('failed');
         }
-    }
+    };
 
-    // GỌI HÀM KHI COMPONENT MOUNT VÀ KHI TOKEN/THAM SỐ ĐÃ SẴN SÀNG
     useEffect(() => {
-        // Chỉ gọi hàm khi token, orderId và resultCode đều có giá trị
-        if (token && orderId && resultCode) {
-            verifyPayment();
-        }
-        // Thêm các dependency để useEffect chạy khi token được tải
-    }, [token, orderId, resultCode]);
+        verifyPayment();
+    }, []);
 
     return (
-        <div className='verify'>
-            <div className="spinner"></div>
+        <div style={styles.container}>
+            {status === 'loading' && (
+                <>
+                    <div className="spinner" style={styles.spinner}></div>
+                    <p>Đang xác nhận thanh toán, vui lòng đợi...</p>
+                </>
+            )}
+            {status === 'success' && (
+                <div style={{ ...styles.messageBox, ...styles.success }}>
+                    <h2>Thanh toán thành công!</h2>
+                    <p>Cảm ơn bạn đã đặt hàng. Đơn hàng của bạn đang được xử lý.</p>
+                    <button style={styles.button} onClick={() => navigate('/')}>
+                        Về trang chủ
+                    </button>
+                </div>
+            )}
+            {status === 'failed' && (
+                <div style={{ ...styles.messageBox, ...styles.failed }}>
+                    <h2>❌ Thanh toán thất bại</h2>
+                    <p>Đã xảy ra lỗi khi xác nhận thanh toán hoặc bạn đã hủy giao dịch.</p>
+                    <button style={styles.button} onClick={() => navigate('/cart')}>
+                        Quay lại giỏ hàng
+                    </button>
+                </div>
+            )}
         </div>
     );
-}
+};
+
+const styles = {
+    container: {
+        maxWidth: 400,
+        margin: '100px auto',
+        padding: 20,
+        textAlign: 'center',
+        fontFamily: "'Segoe UI', Tahoma, Geneva, Verdana, sans-serif",
+        color: '#333',
+    },
+    spinner: {
+        margin: '0 auto 20px',
+        border: '6px solid #f3f3f3',
+        borderTop: '6px solid #3498db',
+        borderRadius: '50%',
+        width: 40,
+        height: 40,
+        animation: 'spin 1s linear infinite',
+    },
+    messageBox: {
+        padding: 20,
+        borderRadius: 8,
+        boxShadow: '0 0 10px rgba(0,0,0,0.1)',
+    },
+    success: {
+        backgroundColor: '#d4edda',
+        color: '#155724',
+        border: '1px solid #c3e6cb',
+    },
+    failed: {
+        backgroundColor: '#f8d7da',
+        color: '#721c24',
+        border: '1px solid #f5c6cb',
+    },
+    button: {
+        marginTop: 20,
+        padding: '10px 20px',
+        backgroundColor: '#3498db',
+        color: '#fff',
+        border: 'none',
+        borderRadius: 4,
+        cursor: 'pointer',
+        fontSize: 16,
+    }
+};
+
+// Thêm animation CSS cho spinner
+const styleSheet = document.styleSheets[0];
+const keyframes =
+    `@keyframes spin {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
+    }`;
+styleSheet.insertRule(keyframes, styleSheet.cssRules.length);
 
 export default Verify;
