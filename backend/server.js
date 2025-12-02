@@ -5,6 +5,7 @@ import foodRouter from "./routes/foodRoute.js"
 import userRouter from "./routes/userRoute.js"
 import cartRouter from "./routes/cartRouter.js"
 import orderRouter from "./routes/orderRoute.js"
+import promoRouter from "./routes/promoRoutes.js";
 import "dotenv/config.js"
 
 // app config
@@ -25,6 +26,7 @@ app.use("/images", express.static('uploads'))
 app.use("/api/user", userRouter)
 app.use("/api/cart", cartRouter)
 app.use("/api/order", orderRouter)
+app.use("/api/promo", promoRouter);
 
 
 app.get("/", (req, res) => {

@@ -12,6 +12,8 @@ import facebook_icon from './facebook_icon.png'
 import twitter_icon from './twitter_icon.png'
 import linkedin_icon from './linkedin_icon.png'
 import logout_icon from './logout_icon.png'
+import app_store from './app_store.png'
+import play_store from './play_store.png'
 
 
 import food_1 from './food_1.jpg'
@@ -130,7 +132,9 @@ export const assets = {
     facebook_icon,
     twitter_icon,
     linkedin_icon,
-    logout_icon
+    logout_icon,
+    app_store,
+    play_store,
 }
 
 

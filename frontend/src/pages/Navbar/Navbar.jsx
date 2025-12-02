@@ -32,7 +32,7 @@ const Navbar = ({ setShowLogin }) => {
             <ul className="navbar-menu">
                 <Link to='/' onClick={() => setMenu("home")} className={menu == "home" ? "active" : ""}>Trang chủ</Link>
                 <a href='#explore-menu' onClick={() => setMenu("menu")} className={menu == "menu" ? "active" : ""}>menu</a>
-                <a href='#' onClick={() => setMenu("mobile-app")} className={menu == "mobile-app" ? "active" : ""}>mobile-app</a>
+                <a href='#app-download' onClick={()=>setMenu("mobile-app")} className={menu==="mobile-app"?"active":""}>Mobile-App</a>
                 <a href='#footer' onClick={() => setMenu("contact-us")} className={menu == "contact-us" ? "active" : ""}>Liên hệ</a>
                 <Link to='/driver' onClick={() => setMenu("driver")} className={menu == "driver" ? "active" : ""}>Tài xế</Link>
             </ul>

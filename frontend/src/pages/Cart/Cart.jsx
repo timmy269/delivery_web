@@ -66,7 +66,7 @@ const Cart = () => {
             <p>Nếu bạn có mã khuyến mại, hãy nhập vào đây</p>
             <div className='cart-promocode-input'>
               <input type="text" placeholder='Enter promo code' />
-              <button>Enter</button>
+              <button>Gửi</button>
             </div>
           </div>
         </div>
