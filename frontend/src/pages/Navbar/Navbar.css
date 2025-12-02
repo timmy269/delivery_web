@@ -1,46 +1,99 @@
-.navbar{
-    padding: 20px 0px;
+.navbar {
+    padding: 20px 20px;
     display: flex;
-    justify-content: space-between;
+    justify-content: space-between; /* chia 3 phần: logo - menu - right */
     align-items: center;
+    gap: 20px; /* khoảng cách giữa 3 phần */
 }
+
 .navbar .logo {
     width: 150px;
+    flex-shrink: 0; /* không bị co nhỏ */
 }
-.navbar-menu{
+
+.navbar-menu {
     display: flex;
     list-style: none;
     gap: 20px;
     color: #49557e;
     font-size: 18px;
+    flex-grow: 1; /* menu chiếm không gian còn lại */
+    justify-content: center; /* căn giữa menu */
+    padding: 0;
+    margin: 0;
 }
-.navbar-right{
+
+.navbar-menu a,
+.navbar-menu li,
+.navbar-menu Link {
+    cursor: pointer;
+    text-decoration: none;
+    color: inherit;
+}
+
+.navbar-right {
     display: flex;
     align-items: center;
-    gap: 40px;
+    gap: 30px;
+    flex-shrink: 0; /* không bị co nhỏ */
 }
 
-.navbar-search {
-  display: flex;
-  align-items: center;
-  background: #fff;
-  border-radius: 20px;
-  padding: 5px 12px;
-  gap: 8px;
+/* Icon tìm kiếm nhỏ ở navbar */
+.search-icon-only {
+    width: 24px;
+    filter: grayscale(50%);
+    transition: filter 0.3s ease;
+    cursor: pointer;
 }
 
-.navbar-search input {
-  border: none;
-  outline: none;
-  width: 150px;
+.search-icon-only:hover {
+    filter: grayscale(0%);
 }
 
-.navbar-search img {
-  width: 18px;
-  cursor: pointer;
+/* Thanh tìm kiếm xuất hiện bên dưới navbar */
+.search-bar-below-navbar {
+    margin-top: 8px;
+    padding: 10px 20px;
+    display: flex;
+    gap: 10px;
+    background-color: white;
+    border-radius: 30px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    max-width: 480px; /* tăng rộng hơn */
+    margin-left: auto;
+    margin-right: auto;
 }
 
-.navbar button{
+.search-bar-below-navbar input {
+    flex-grow: 1;
+    border: none;
+    outline: none;
+    font-size: 16px;
+    border-radius: 30px; /* bo tròn đẹp */
+    padding: 12px 20px; /* tăng padding để input rộng và thoáng */
+    background-color: #f9f9f9;
+}
+
+.search-bar-below-navbar img {
+    width: 28px; /* tăng kích thước icon */
+    cursor: pointer;
+    align-self: center;
+}
+
+.search-bar-below-navbar button {
+    background: tomato;
+    color: white;
+    border: none;
+    padding: 10px 18px; /* tăng padding cho nút */
+    border-radius: 25px;
+    cursor: pointer;
+    font-weight: bold;
+    align-self: center;
+}
+
+
+/* Các nút trong navbar */
+.navbar button {
     background: transparent;
     font-size: 16px;
     color: #49557e;
@@ -50,20 +103,25 @@
     cursor: pointer;
     transition: 0.3s;
 }
-.navbar button:hover{
+
+.navbar button:hover {
     background-color: #fff4f2;
 }
-.navbar .active{
+
+.navbar .active {
     padding-bottom: 2px;
     border-bottom: 2px solid #49557e;
 }
-.navbar li{
+
+.navbar li {
     cursor: pointer;
 }
-.navbar-search-icon{
+
+.navbar-search-icon {
     position: relative;
 }
-.navbar-search-icon .dot{
+
+.navbar-search-icon .dot {
     position: absolute;
     min-width: 10px;
     min-height: 10px;
@@ -72,83 +130,88 @@
     top: -8px;
     right: -8px;
 }
-.navbar-profile{
-    position: relative;
 
+.navbar-profile {
+    position: relative;
 }
-.nav-profile-dropdown{
+
+.nav-profile-dropdown {
     position: absolute;
     display: none;
     right: 0;
     z-index: 1;
 }
-.navbar-profile:hover .nav-profile-dropdown{
-display: flex;
-flex-direction: column;
-gap: 10px;
-background-color: #fff2ef;
-padding: 12px 25px;
-border-radius: 4px;
-border: 1px solid tomato;
-outline: 2px solid white;
-list-style: none;
+
+.navbar-profile:hover .nav-profile-dropdown {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    background-color: #fff2ef;
+    padding: 12px 25px;
+    border-radius: 4px;
+    border: 1px solid tomato;
+    outline: 2px solid white;
+    list-style: none;
 }
-.nav-profile-dropdown li{
+
+.nav-profile-dropdown li {
     display: flex;
     align-items: center;
     gap: 10px;
     cursor: pointer;
-
 }
 
 .nav-profile-dropdown img {
     width: 20px;
 }
-.nav-profile-dropdown li:hover{
+
+.nav-profile-dropdown li:hover {
     color: tomato;
 }
 
-@media (max-width:1050px) {
-    .navbar .logo{
+/* Responsive */
+
+@media (max-width: 1050px) {
+    .navbar .logo {
         width: 140px;
     }
-    .navbar-menu{
+    .navbar-menu {
         gap: 20px;
         font-size: 17px;
     }
-    .navbar-right{
-        gap: 30px;
+    .navbar-right {
+        gap: 25px;
     }
-    .navbar-right img{
+    .navbar-right img {
         width: 22px;
     }
-    .navbar-right button{
+    .navbar-right button {
         padding: 8px 25px;
     }
 }
-@media (max-width:900px) {
-    .navbar .logo{
+
+@media (max-width: 900px) {
+    .navbar .logo {
         width: 120px;
     }
-    .navbar-menu{
-        gap:  15px ;
+    .navbar-menu {
+        gap: 15px;
         font-size: 16px;
     }
-    .navbar-right{
-        gap: 20px;
+    .navbar-right {
+        gap: 15px;
     }
-    .navbar-right img{
+    .navbar-right img {
         width: 20px;
     }
-    .navbar-right button{
+    .navbar-right button {
         padding: 7px 20px;
         font-size: 15px;
     }
 }
-@media (max-width:750px) {
-    
-    .navbar-menu{
+
+@media (max-width: 750px) {
+    .navbar-menu {
         display: none;
     }
-    
 }

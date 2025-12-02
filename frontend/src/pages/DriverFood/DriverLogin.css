@@ -1,0 +1,80 @@
+.driver-login {
+  max-width: 420px;
+  margin: 80px auto;
+  padding: 30px;
+  background: #fff8e1;
+  border-radius: 12px;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.driver-login h2 {
+  text-align: center;
+  margin-bottom: 25px;
+  font-size: 24px;
+  font-weight: 600;
+  color: #ff6f00;
+}
+
+.driver-login form {
+  display: flex;
+  flex-direction: column;
+}
+
+.driver-login input {
+  margin-bottom: 15px;
+  padding: 12px 14px;
+  font-size: 15px;
+  border: 1px solid #ffcc80;
+  border-radius: 8px;
+  background-color: #fff3e0;
+  transition: border-color 0.3s, box-shadow 0.3s;
+}
+
+.driver-login input:focus {
+  border-color: #ff9800;
+  box-shadow: 0 0 6px rgba(255,152,0,0.4);
+  outline: none;
+}
+
+.driver-login button {
+  padding: 12px;
+  background: linear-gradient(135deg, #ff9800, #f57c00);
+  color: #fff;
+  font-size: 16px;
+  font-weight: 600;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: transform 0.2s, background 0.3s;
+}
+
+.driver-login button:hover {
+  transform: translateY(-2px);
+  background: linear-gradient(135deg, #f57c00, #e65100);
+}
+
+.driver-login .error {
+  color: #d32f2f;
+  font-size: 14px;
+  margin-top: 10px;
+  text-align: center;
+}
+
+.driver-login p {
+  text-align: center;
+  margin-top: 20px;
+  font-size: 14px;
+  color: #555;
+}
+
+.driver-login .toggle-link {
+  color: #f57c00;
+  font-weight: 600;
+  cursor: pointer;
+  transition: color 0.3s;
+}
+
+.driver-login .toggle-link:hover {
+  color: #e65100;
+}

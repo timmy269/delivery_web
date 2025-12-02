@@ -1,6 +1,6 @@
 import React, { useMemo, useState } from "react";
 import "./DriverPages.css";
-import DriverNavbar from "../../components/Driver/DriverNavbar";
+import DriverNavbar from "../../components/Driver/DriverNavbar.jsx";
 
 const formatTime = () =>
   new Intl.DateTimeFormat("vi-VN", {

@@ -1,12 +1,12 @@
+import React, { useContext, useState, useEffect } from "react";
 import { StoreContext } from "../../context/StoreContext";
 import FoodItem from "../../components/FoodItem/FoodItem";
 import { useSearchParams } from "react-router-dom";
-import { useEffect } from "react";
 
 const Search = () => {
   const { food_list } = useContext(StoreContext);
-  const [parmas] = useSearchParams();
-  const keyword = parmas.get("keywrod")?.toLowerCase();
+  const [params] = useSearchParams();
+  const keyword = params.get("keyword")?.toLowerCase();
   const [results, setResults] = useState([]);
 
   useEffect(() => {
@@ -28,8 +28,13 @@ const Search = () => {
       ) : (
         <div className="food-display-list">
           {results.map((food) => (
-            <FoodItem key={food._id} id={food._id} name={food.name}
-              price={food.price} image={food.image} />
+            <FoodItem
+              key={food._id}
+              id={food._id}
+              name={food.name}
+              price={food.price}
+              image={food.image}
+            />
           ))}
         </div>
       )}

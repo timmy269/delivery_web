@@ -506,3 +506,16 @@
   background: #e0f2fe;
   color: #0c4a6e;
 }
+.tracking-card__exit {
+  margin-top: 24px;
+  padding: 10px 16px;
+  background-color: #f44336;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+}
+.tracking-card__exit:hover {
+  background-color: #d32f2f;
+}
+
