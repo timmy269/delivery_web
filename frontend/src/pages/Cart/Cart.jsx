@@ -61,15 +61,6 @@ const Cart = () => {
           </div>
           <button onClick={() => navigate('/order')}>TIẾN HÀNH THANH TOÁN</button>
         </div>
-        <div className="cart-promocode">
-          <div>
-            <p>Nếu bạn có mã khuyến mại, hãy nhập vào đây</p>
-            <div className='cart-promocode-input'>
-              <input type="text" placeholder='Enter promo code' />
-              <button>Gửi</button>
-            </div>
-          </div>
-        </div>
       </div>
     </div>
   )

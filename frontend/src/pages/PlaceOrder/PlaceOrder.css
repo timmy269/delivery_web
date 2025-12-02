@@ -1,41 +1,113 @@
 .place-order {
-  display: flex;
-  align-items: start;
-  justify-content: space-between;
-  gap: 50px;
-  margin-top: 100px;
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 24px;
+    margin-top: 40px;
 }
 
 .place-order-left {
-  width: 100%;
-  max-width: max(30%, 500px);
+    width: 100%;
+    max-width: 60%;
 }
 
 .place-order-left .title {
-  font-size: 30px;
-  font-weight: 600;
-  margin-bottom: 50px;
+    font-size: 22px;
+    font-weight: 600;
+    margin-bottom: 20px;
 }
 
 .place-order-left input {
-  margin-bottom: 15px;
-  width: 100%;
-  padding: 10px;
-  border: 1px, solid #c5c5c5;
-  border-radius: 4px;
-  outline-color: tomato;
+    margin-bottom: 10px;
+    width: 100%;
+    padding: 8px;
+    border: 1px solid #e0e0e0;
+    border-radius: 6px;
+    outline-color: tomato;
 }
 
 .place-order-left .multi-fields {
-  display: flex;
-  gap: 10px;
+    display: flex;
+    gap: 8px;
 }
 
-.place-order-right{
-  width: 100%;
-  max-width: max(40%, 500px);
+.place-order-right {
+    width: 100%;
+    max-width: 360px;
+}
+
+.place-order-right .cart-total {
+    background: #fff;
+    border: 1px solid #eee;
+    padding: 14px;
+    border-radius: 8px;
 }
 
 .place-order-right .cart-total button {
-  margin-top: 30px;
+    margin-top: 12px;
+    width: 100%;
+    padding: 10px 12px;
+}
+
+.cart-total-details {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 6px 0;
+    font-size: 14px;
+}
+
+
+/* Promo area */
+
+.promo-section {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin-bottom: 12px;
+}
+
+.promo-input {
+    padding: 8px;
+    border: 1px solid #e0e0e0;
+    border-radius: 6px;
+    outline-color: tomato;
+}
+
+.promo-actions {
+    display: flex;
+    gap: 8px;
+}
+
+.promo-btn {
+    padding: 8px 12px;
+    border-radius: 6px;
+    border: 1px solid #ddd;
+    background: #f5f5f5;
+    cursor: pointer;
+}
+
+.promo-btn.remove {
+    background: #fff;
+    color: #333;
+}
+
+.promo-message {
+    font-size: 13px;
+}
+
+.promo-message.error {
+    color: #c0392b;
+}
+
+.promo-message.success {
+    color: #27ae60;
+}
+
+.promo-message.info {
+    color: #2c3e50;
+}
+
+.discount-line p {
+    color: #27ae60;
 }
