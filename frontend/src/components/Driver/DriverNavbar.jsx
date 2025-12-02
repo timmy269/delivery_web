@@ -7,12 +7,12 @@ const driverLinks = [
   { key: "wallet", label: "Ví tài xế", to: "/driver/wallet" },
 ];
 
-const DriverNavbar = ({ active = "tracking" }) => {
+const DriverNavbar = ({ active = "tracking"}) => {
+  
   return (
     <nav className="driver-navbar">
       <div className="driver-navbar__brand">
-        <h3>Khu vực tài xế</h3>
-        <span>Ca sáng • 09:00 - 13:00</span>
+        <h3>{name}</h3>
       </div>
 
       <div className="driver-navbar__links">

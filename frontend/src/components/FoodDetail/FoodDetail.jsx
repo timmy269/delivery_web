@@ -33,65 +33,48 @@ const FoodDetail = () => {
   };
 
   return (
-    <div className="StyleDetailProduct">
-      <div className="detail_product">
-
-        {/* Left images */}
-        <div className="content__left">
+    <div className="food-detail-container">
+      <div className="food-detail-wrapper">
+        {/* Hình ảnh món ăn */}
+        <div className="food-image-section">
           <img
             src={`http://localhost:4000/images/${food.image}`}
             alt={food.name}
+            className="detail-img"
           />
         </div>
 
-        {/* Right content */}
-        <div className="content__right">
-          <div className="content__right__content">
-            <h1 className="title">{food.name}</h1>
+        {/* Thông tin món ăn */}
+        <div className="food-info-section">
+          <h1 className="food-name">{food.name}</h1>
+          <p className="food-description">{food.description}</p>
+          <h2 className="food-price">{food.price.toLocaleString()} VND</h2>
 
-            {/* 🌟 Star rating (fake UI demo) */}
-            <div className="star">
-              <span>⭐ ⭐ ⭐ ⭐ ⭐</span>
-              <span className="text">(120 đánh giá)</span>
-            </div>
-
-            <p className="detail">{food.description}</p>
-            <h2 className="price">{food.price.toLocaleString()} VND</h2>
-
-
-            {/* Quantity */}
-            <div className="quatity">
-              <p>Số lượng:</p>
-              <div className="quatity__number">
-                <div className="set" onClick={() => setQuantity(prev => Math.max(1, prev - 1))}>-</div>
-                <span>{quantity}</span>
-                <div className="set" onClick={() => setQuantity(prev => prev + 1)}>+</div>
-              </div>
-            </div>
-
-            {/* Trạng thái hàng */}
-            <div className="status">
-              <span>Tình trạng: ✔️ Còn hàng</span>
-            </div>
-
-            {/* Buttons */}
-            <div className="button__add">
+          {/* Bộ chọn số lượng */}
+          <div className="quantity-selector">
+            <label>Số lượng:</label>
+            <div className="quantity-buttons">
               <button
-                className="flex_button button__add__cart"
-                onClick={handleAddToCart}
+                className="qty-btn minus"
+                onClick={() => setQuantity((prev) => Math.max(1, prev - 1))}
               >
-                <span>Thêm vào giỏ hàng</span>
+                −
               </button>
-
-              {/* ❤️ Like button */}
-              <button className="flex_button button__add__like">
-                <span className="icon_like">❤️</span>
-                <span>Yêu thích</span>
+              <span className="qty-display">{quantity}</span>
+              <button
+                className="qty-btn plus"
+                onClick={() => setQuantity((prev) => prev + 1)}
+              >
+                +
               </button>
             </div>
           </div>
-        </div>
 
+          {/* Nút thêm vào giỏ hàng */}
+          <button className="add-to-cart-btn" onClick={handleAddToCart}>
+            🛒 Thêm vào giỏ hàng
+          </button>
+        </div>
       </div>
     </div>
   );

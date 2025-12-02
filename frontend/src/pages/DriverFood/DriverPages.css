@@ -390,6 +390,25 @@
   text-align: center;
 }
 
+.chart-placeholder__list {
+  display: grid;
+  gap: 8px;
+  text-align: left;
+}
+
+.chart-placeholder__item {
+  display: flex;
+  justify-content: space-between;
+  font-size: 14px;
+  border-bottom: 1px dashed rgba(248, 250, 252, 0.2);
+  padding-bottom: 6px;
+}
+
+.chart-placeholder__item:last-child {
+  border-bottom: none;
+  padding-bottom: 0;
+}
+
 .driver-navbar {
   display: flex;
   align-items: center;
@@ -518,4 +537,3 @@
 .tracking-card__exit:hover {
   background-color: #d32f2f;
 }
-

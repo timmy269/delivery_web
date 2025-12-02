@@ -1,41 +1,121 @@
-import React, { useMemo, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
+import axios from "axios";
 import "./DriverPages.css";
 import DriverNavbar from "../../components/Driver/DriverNavbar.jsx";
 
-const DriverRevenue = () => {
-  const [month, setMonth] = useState("2025-11");
+const statusTextMap = {
+  assigned: "Đã nhận",
+  delivering: "Đang giao",
+  delivered: "Hoàn thành",
+  failed: "Thất bại"
+};
 
-  const summary = useMemo(
-    () => [
+const statusPillClass = (status) => {
+  if (status === "delivered") return "pill--success";
+  if (status === "delivering") return "pill--warning";
+  if (status === "failed") return "pill--warning";
+  return "pill--muted";
+};
+
+const formatCurrency = (value = 0) =>
+  `${Number(value || 0).toLocaleString("vi-VN")} VND`;
+
+const formatPercent = (value = 0) =>
+  `${Number(value || 0).toFixed(1)}%`;
+
+const formatDateTime = (value) =>
+  value ? new Date(value).toLocaleString("vi-VN", { hour12: false }) : "—";
+
+const DriverRevenue = () => {
+  const [month, setMonth] = useState(() => new Date().toISOString().slice(0, 7));
+  const [summary, setSummary] = useState(null);
+  const [orders, setOrders] = useState([]);
+  const [dailyTotals, setDailyTotals] = useState([]);
+  const [paymentFilter, setPaymentFilter] = useState("all");
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
+
+  useEffect(() => {
+    const token = localStorage.getItem("driverToken");
+    if (!token) {
+      setError("Vui lòng đăng nhập tài xế để xem doanh thu.");
+      setSummary(null);
+      setOrders([]);
+      setDailyTotals([]);
+      setLoading(false);
+      return;
+    }
+
+    const fetchRevenue = async () => {
+      setLoading(true);
+      setError("");
+      try {
+        const res = await axios.get("http://localhost:4000/api/driver/revenue", {
+          headers: { token },
+          params: { month }
+        });
+
+        if (!res.data.success) {
+          throw new Error(res.data.message || "Request failed");
+        }
+
+        const payload = res.data.data || {};
+        setSummary(payload.summary || null);
+        setOrders(payload.orders || []);
+        setDailyTotals(payload.dailyTotals || []);
+      } catch (err) {
+        console.error("Failed to fetch driver revenue:", err);
+        setError("Không thể tải dữ liệu doanh thu. Vui lòng thử lại sau.");
+        setSummary(null);
+        setOrders([]);
+        setDailyTotals([]);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchRevenue();
+  }, [month]);
+
+  const summaryCards = useMemo(() => {
+    if (!summary) {
+      return [
+        { label: "Thu nhập tháng", value: "0 VND", trend: "Chưa có dữ liệu" },
+        { label: "Tổng đơn nhận", value: "0 đơn", trend: "—" },
+        { label: "Tỉ lệ hoàn thành", value: "0%", trend: "—" }
+      ];
+    }
+
+    return [
       {
         label: "Thu nhập tháng",
-        value: "5,2 triệu",
-        trend: "+8% so với tháng trước",
+        value: formatCurrency(summary.totalEarnings),
+        trend: `${summary.completedOrders || 0} đơn hoàn thành`
       },
       {
-        label: "Đơn hoàn thành",
-        value: "34 đơn",
-        trend: "Tỷ lệ thành công 98%",
+        label: "Tổng đơn nhận",
+        value: `${summary.totalOrders || 0} đơn`,
+        trend: `${summary.inProgressOrders || 0} đơn đang xử lý`
       },
       {
-        label: "Thời gian online",
-        value: "86 giờ",
-        trend: "Trung bình 4h/ngày",
-      },
-    ],
-    []
-  );
+        label: "Tỉ lệ hoàn thành",
+        value: formatPercent(summary.completionRate),
+        trend: `Giá trị TB: ${formatCurrency(summary.averageOrderValue)}`
+      }
+    ];
+  }, [summary]);
 
-  const orders = useMemo(
-    () => [
-      { id: "DH-2846", earning: 68000, distance: "5.2 km", status: "Hoàn thành", method: "MoMo" },
-      { id: "DH-2838", earning: 52000, distance: "3.0 km", status: "Hoàn thành", method: "Tiền mặt" },
-      { id: "DH-2831", earning: 74000, distance: "7.4 km", status: "Hoàn thành", method: "ZaloPay" },
-      { id: "DH-2828", earning: 33000, distance: "1.2 km", status: "Hoàn thành", method: "MoMo" },
-      { id: "DH-2822", earning: 25000, distance: "0.8 km", status: "Chờ xác nhận", method: "Tiền mặt" },
-    ],
-    []
-  );
+  const filteredOrders = useMemo(() => {
+    if (paymentFilter === "cash") {
+      return orders.filter((order) => order.paymentMethod === "COD");
+    }
+    if (paymentFilter === "cashless") {
+      return orders.filter((order) => order.paymentMethod && order.paymentMethod !== "COD");
+    }
+    return orders;
+  }, [orders, paymentFilter]);
+
+  const heroMonth = summary?.month || month;
 
   return (
     <div className="driver-page">
@@ -44,21 +124,34 @@ const DriverRevenue = () => {
 
         <div className="driver-hero">
           <div className="driver-hero__content">
-            <h2>Doanh thu tháng {month}</h2>
-            <p>Theo dõi thu nhập, thời gian online và hiệu suất từng đơn hàng.</p>
+            <h2>Doanh thu tháng {heroMonth}</h2>
+            <p>Dữ liệu doanh thu đồng bộ với trạng thái đơn trong phần theo dõi đơn hàng.</p>
             <div className="driver-hero__meta">
-              <span>Mục tiêu: 7.000.000 VND</span>
-              <span>Hoàn thành 68%</span>
+              <span>Tổng đơn: {summary?.totalOrders ?? 0}</span>
+              <span>Hoàn thành: {summary?.completedOrders ?? 0}</span>
             </div>
           </div>
         </div>
 
+        {loading && (
+          <p className="driver-feedback driver-feedback--info">
+            Đang tải dữ liệu doanh thu...
+          </p>
+        )}
+        {error && (
+          <p className="driver-feedback driver-feedback--error">
+            {error}
+          </p>
+        )}
+
         <section className="driver-page__section">
           <h3 className="driver-page__title">Tổng quan thu nhập</h3>
-          <p className="driver-page__subtitle">Số liệu minh họa, sẽ cập nhật realtime khi có API.</p>
+          <p className="driver-page__subtitle">
+            Số liệu được tính từ các đơn mà bạn nhận và cập nhật trạng thái hoàn thành.
+          </p>
 
           <div className="driver-grid driver-grid--three">
-            {summary.map((item) => (
+            {summaryCards.map((item) => (
               <div key={item.label} className="driver-card">
                 <span className="driver-card__label">{item.label}</span>
                 <span className="driver-card__value">{item.value}</span>
@@ -68,22 +161,36 @@ const DriverRevenue = () => {
           </div>
 
           <div className="chart-placeholder">
-            Biểu đồ thu nhập theo ngày .
+            {dailyTotals.length === 0 ? (
+              <>Chưa có đơn hoàn thành trong tháng này.</>
+            ) : (
+              <div className="chart-placeholder__list">
+                {dailyTotals.map((item) => (
+                  <div key={item.date} className="chart-placeholder__item">
+                    <span>{item.date}</span>
+                    <strong>{formatCurrency(item.earnings)}</strong>
+                    <span>{item.orders} đơn</span>
+                  </div>
+                ))}
+              </div>
+            )}
           </div>
         </section>
 
         <section className="driver-page__section">
           <h3 className="driver-page__title">Lịch sử đơn hàng</h3>
-          <p className="driver-page__subtitle">Lọc theo tháng hoặc phương thức thanh toán để so sánh dễ dàng.</p>
+          <p className="driver-page__subtitle">
+            Toàn bộ đơn mà bạn nhận sẽ hiển thị tại đây để theo dõi doanh thu chi tiết.
+          </p>
 
           <div className="filter-row">
             <label>
               <span>Chọn tháng</span>
               <input type="month" value={month} onChange={(e) => setMonth(e.target.value)} />
             </label>
-            <select defaultValue="all">
+            <select value={paymentFilter} onChange={(e) => setPaymentFilter(e.target.value)}>
               <option value="all">Tất cả đơn</option>
-              <option value="cash">Thanh toán tiền mặt</option>
+              <option value="cash">Thanh toán tiền mặt (COD)</option>
               <option value="cashless">Thanh toán online</option>
             </select>
           </div>
@@ -93,25 +200,34 @@ const DriverRevenue = () => {
               <tr>
                 <th>Mã đơn</th>
                 <th>Thu nhập</th>
-                <th>Quãng đường</th>
                 <th>Trạng thái</th>
                 <th>Thanh toán</th>
+                <th>Hoàn thành lúc</th>
               </tr>
             </thead>
             <tbody>
-              {orders.map((item) => (
-                <tr key={item.id}>
-                  <td>{item.id}</td>
-                  <td>{item.earning.toLocaleString()} VND</td>
-                  <td>{item.distance}</td>
-                  <td>
-                    <span className={`pill ${item.status === "Hoàn thành" ? "pill--success" : "pill--warning"}`}>
-                      {item.status}
-                    </span>
-                  </td>
-                  <td>{item.method}</td>
+              {filteredOrders.length === 0 ? (
+                <tr>
+                  <td colSpan="5">Chưa có đơn phù hợp với bộ lọc này.</td>
                 </tr>
-              ))}
+              ) : (
+                filteredOrders.map((order) => (
+                  <tr key={order.driverOrderId}>
+                    <td>{order.orderId || order.driverOrderId}</td>
+                    <td>{formatCurrency(order.amount)}</td>
+                    <td>
+                      <span className={`pill ${statusPillClass(order.status)}`}>
+                        {statusTextMap[order.status] || order.status}
+                      </span>
+                    </td>
+                    <td>
+                      {order.paymentMethod} ·{" "}
+                      {order.paymentStatus === "paid" ? "Đã thanh toán" : "Chờ thanh toán"}
+                    </td>
+                    <td>{formatDateTime(order.completedAt || order.receivedAt)}</td>
+                  </tr>
+                ))
+              )}
             </tbody>
           </table>
         </section>
