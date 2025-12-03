@@ -8,6 +8,7 @@ import orderRouter from "./routes/orderRoute.js"
 import promoRouter from "./routes/promoRoutes.js"
 import driverRoutes from "./routes/driverRoutes.js";
 import driverOrderRoutes from "./routes/driverOrderRoutes.js";
+import driverWalletRoutes from "./routes/driverwalletRoutes.js";
 import "dotenv/config.js"
 
 // app config
@@ -31,6 +32,7 @@ app.use("/api/order", orderRouter)
 app.use("/api/promo", promoRouter)
 app.use("/api/driver", driverRoutes);
 app.use("/api/driver", driverOrderRoutes);
+app.use("/api/driver", driverWalletRoutes);
 
 
 app.get("/", (req, res) => {

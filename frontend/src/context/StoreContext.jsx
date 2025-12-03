@@ -15,13 +15,13 @@ const normalizeItem = (item) => {
     const category = item.idLoai || item.category || "";
     let image = item.urlHinh || item.image || "";
     if (!image) {
-        // Không làm gì
+
     } else if (image.startsWith('http')) {
-        // Không làm gì
+
     } else if (image.startsWith('/uploads/')) {
         image = API_BASE.replace(/\/$/, '') + image;
     } else if (image.startsWith('/')) {
-        // Không làm gì
+
     } else {
         image = API_BASE.replace(/\/$/, '') + '/uploads/' + image;
     }
@@ -43,8 +43,6 @@ const StoreContextProvider = (props) => {
     const [appliedPromo, setAppliedPromo] = useState(null);
     const [discountAmount, setDiscountAmount] = useState(0);
     const [appliedFreeShip, setAppliedFreeShip] = useState(false);
-
-    // === USER CART FUNCTIONS ===
 
     // Thêm món vào giỏ
     const addToCart = async (itemId, quantity = 1) => {
@@ -161,7 +159,7 @@ const StoreContextProvider = (props) => {
         return subtotalAfterDiscount + ship;
     };
 
-    // === DRIVER TOKEN MANAGEMENT ===
+    // DRIVER TOKEN 
     useEffect(() => {
         if (token) localStorage.setItem("token", token);
         else localStorage.removeItem("token");
@@ -172,7 +170,7 @@ const StoreContextProvider = (props) => {
         else localStorage.removeItem("driverToken");
     }, [driverToken]);
 
-    // Load dữ liệu lúc component mount
+
     useEffect(() => {
         async function loadData() {
             await fetchFoodList();

@@ -3,7 +3,7 @@ import userModel from "../models/userModel.js"
 //add items to user cart
 const addToCart = async (req, res) => {
   try {
-    const { itemId, quantity = 1 } = req.body; // lấy quantity, mặc định 1 nếu không truyền
+    const { itemId, quantity = 1 } = req.body; 
 
     let userData = await userModel.findById(req.userId);
     let cartData = userData.cartData || {};

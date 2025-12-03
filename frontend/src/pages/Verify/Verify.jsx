@@ -8,7 +8,7 @@ const Verify = () => {
     const orderId = searchParams.get("orderId");
     const navigate = useNavigate();
 
-    const [status, setStatus] = useState('loading'); // 'loading' | 'success' | 'failed'
+    const [status, setStatus] = useState('loading'); 
 
     const verifyPayment = async () => {
         if (!orderId || !resultCode) {

@@ -202,7 +202,7 @@ const DriverTracking = () => {
             navigate("/driver");
           }}
         >
-          Thoát về đăng nhập
+          Thoát
         </button>
       </div>
     </div>

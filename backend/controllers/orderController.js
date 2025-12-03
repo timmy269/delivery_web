@@ -59,11 +59,10 @@ const placeOrderMomo = async (req, expressRes) => {
         const secretKey = process.env.MOMO_SECRET_KEY;
 
         // ********** SỬ DỤNG DỮ LIỆU ĐƠN HÀNG THỰC TẾ **********
-        const amount = newOrder.amount.toString(); // Phải là số tiền thực tế và là chuỗi
-        const orderId = newOrder._id.toString(); // ID của đơn hàng trong DB
-        const requestId = orderId + new Date().getTime(); // Dùng ID đơn hàng + timestamp để đảm bảo tính duy nhất cho MoMo
+        const amount = newOrder.amount.toString(); 
+        const orderId = newOrder._id.toString();
+        const requestId = orderId + new Date().getTime(); 
         const orderInfo = `Thanh toán đơn hàng: ${orderId}`;
-        // ********************************************************
 
         const redirectUrl = "http://localhost:5173/verify";
         const ipnUrl = "http://localhost:4000/api/order/momo-ipn";
@@ -101,7 +100,7 @@ const placeOrderMomo = async (req, expressRes) => {
         });
         // 5. Cấu hình HTTPS
         const options = {
-            hostname: 'test-payment.momo.vn', // Hoặc 'payment.momo.vn' cho Production
+            hostname: 'test-payment.momo.vn', 
             port: 443,
             path: '/v2/gateway/api/create',
             method: 'POST',
@@ -111,7 +110,7 @@ const placeOrderMomo = async (req, expressRes) => {
             }
         }
         // 6. Gửi Request và Xử lý Phản hồi MoMo
-        const apiReq = https.request(options, apiRes => { // << Đã sửa thành apiReq, apiRes
+        const apiReq = https.request(options, apiRes => { 
             let responseBody = '';
 
             apiRes.setEncoding('utf8');
@@ -128,7 +127,6 @@ const placeOrderMomo = async (req, expressRes) => {
                         // <<<<< GỬI URL THANH TOÁN VỀ CLIENT (Frontend) >>>>>
                         expressRes.json({ success: true, payUrl: jsonBody.payUrl });
                     } else {
-                        // Xử lý lỗi từ MoMo
                         console.error(`MoMo API Error: ${jsonBody.message}`);
                         expressRes.status(500).json({ success: false, message: `Lỗi MoMo: ${jsonBody.message}` });
                     }
@@ -150,7 +148,6 @@ const placeOrderMomo = async (req, expressRes) => {
         apiReq.end();
 
     } catch (error) {
-        // Bắt các lỗi trước khi kết nối MoMo (DB, định nghĩa biến,...)
         console.error("LỖI 500 TRONG placeOrderMomo:", error);
         expressRes.status(500).json({ success: false, message: "Lỗi nội bộ server khi tạo đơn hàng." });
     }
@@ -158,14 +155,12 @@ const placeOrderMomo = async (req, expressRes) => {
 
 const momoIPN = async (req, res) => {
     const { orderId, resultCode } = req.body;
-    // TODO: Thêm bước xác thực chữ ký từ MoMo để bảo mật
     try {
-        if (resultCode === 0) { // Thanh toán thành công
+        if (resultCode === 0) { 
             await orderModel.findByIdAndUpdate(orderId, { status: "Đang xử lý", payment: true });
-        } else { // Thanh toán thất bại
+        } else { 
             await orderModel.findByIdAndUpdate(orderId, { status: "Thanh toán thất bại" });
         }
-        // Phản hồi 204 cho MoMo để xác nhận đã nhận IPN
         res.status(204).send();
     } catch (error) {
         console.log("Lỗi xử lý MoMo IPN:", error);
@@ -177,12 +172,10 @@ const verifyOrder = async (req, res) => {
     const { resultCode, orderId } = req.body;
 
     try {
-        if (resultCode === '0') { // Thanh toán thành công
-            // Cập nhật trạng thái đơn hàng: Đã thanh toán và đang xử lý
+        if (resultCode === '0') { 
             await orderModel.findByIdAndUpdate(orderId, { status: "Đang xử lý", payment: true });
             res.json({ success: true, message: "Thanh toán thành công" });
-        } else { // Thanh toán thất bại hoặc bị hủy
-            // Cập nhật trạng thái đơn hàng: Thanh toán thất bại
+        } else { 
             await orderModel.findByIdAndUpdate(orderId, { status: "Thanh toán thất bại" });
             res.json({
                 success: false, message: "Thanh toán thất bại"
