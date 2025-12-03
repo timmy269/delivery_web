@@ -8,9 +8,10 @@ import Footer from './components/Footer/Footer';
 import LoginPopup from './components/LoginPopup/LoginPopup';
 import Verify from './pages/Verify/Verify';
 import MyOrders from './pages/MyOrders/MyOrders'
-import DriverTracking from './pages/DriverFood/DriverTracking';
 import DriverRevenue from './pages/DriverFood/DriverRevenue';
 import DriverWallet from './pages/DriverFood/DriverWallet';
+import DriverTracking from './pages/DriverFood/DriverTracking';
+import DriverLogin from './pages/DriverFood/DriverLogin.jsx';
 import FoodDetail from './components/FoodDetail/FoodDetail';
 import Search from './pages/search/search';
 
@@ -30,8 +31,8 @@ const App = () => {
           <Route path='/order' element={<PlaceOrder />} />
           <Route path='/verify' element={<Verify />} />
           <Route path='/myorders' element={<MyOrders />} />
-          <Route path='/driver' element={<Navigate to='/driver/tracking' replace />} />
           <Route path='/food/:id' element={<FoodDetail />} />
+          <Route path='/driver' element={<DriverLogin />} />
           <Route path='/driver/tracking' element={<DriverTracking />} />
           <Route path='/driver/revenue' element={<DriverRevenue />} />
           <Route path='/driver/wallet' element={<DriverWallet />} />

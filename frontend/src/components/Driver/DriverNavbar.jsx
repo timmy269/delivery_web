@@ -7,8 +7,8 @@ const driverLinks = [
   { key: "wallet", label: "Ví tài xế", to: "/driver/wallet" },
 ];
 
-const DriverNavbar = ({ active = "tracking"}) => {
-  
+const DriverNavbar = ({ active = "tracking" }) => {
+
   return (
     <nav className="driver-navbar">
       <div className="driver-navbar__brand">

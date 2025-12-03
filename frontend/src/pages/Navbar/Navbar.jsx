@@ -1,12 +1,12 @@
-import React, { useContext, useState } from "react";
-import "./Navbar.css";
-import { assets } from "@/assets/assets";
-import { Link, useNavigate } from "react-router-dom";
-import { StoreContext } from "../../context/StoreContext";
+import React, { useContext, useState } from 'react'
+import './Navbar.css'
+import { assets } from '../../assets/assets'
+import { Link, useNavigate } from 'react-router-dom'
+import { StoreContext } from '../../context/StoreContext'
 
 const Navbar = ({ setShowLogin }) => {
     const [menu, setMenu] = useState("menu");
-    const { getTotalCartAmount, token, setToken } = useContext(StoreContext);
+    const { getTotalCartAmount, token, setToken, driverToken } = useContext(StoreContext);
     const navigate = useNavigate();
 
     const logout = () => {
@@ -36,6 +36,15 @@ const Navbar = ({ setShowLogin }) => {
         }
     };
 
+    const handleDriverClick = () => {
+        setMenu("driver");
+        if (!driverToken) {
+            navigate("/driver"); // chưa đăng nhập → vào trang login tài xế
+        } else {
+            navigate("/driver/tracking"); // đã đăng nhập → vào trang theo dõi đơn
+        }
+    };
+
     return (
         <>
             <div className="navbar">
@@ -45,7 +54,7 @@ const Navbar = ({ setShowLogin }) => {
                     <a href='#explore-menu' onClick={() => setMenu("menu")} className={menu === "menu" ? "active" : ""}>menu</a>
                     <a href='#app-download' onClick={() => setMenu("mobile-app")} className={menu === "mobile-app" ? "active" : ""}>Mobile-App</a>
                     <a href='#footer' onClick={() => setMenu("contact-us")} className={menu === "contact-us" ? "active" : ""}>Liên hệ</a>
-                    <Link to='/driver' onClick={() => setMenu("driver")} className={menu === "driver" ? "active" : ""}>Tài xế</Link>
+                    <li onClick={handleDriverClick} className={menu === "driver" ? "active" : ""}>Tài xế</li>
                 </ul>
                 <div className="navbar-right">
                     {/* Icon tìm kiếm nhỏ */}
