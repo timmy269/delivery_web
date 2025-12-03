@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import Navbar from './pages/Navbar/Navbar';
-import { Route, Routes, Navigate } from 'react-router-dom';
+import { Route, Routes, Navigate, useLocation } from 'react-router-dom';
 import Home from './pages/Home/Home'
 import Cart from './pages/Cart/Cart'
 import PlaceOrder from './pages/PlaceOrder/PlaceOrder';
@@ -18,13 +18,14 @@ import Search from './pages/search/search';
 const App = () => {
 
   const [showLogin, setShowLogin] = useState(false)
-  
+  const location = useLocation();
+  const isDriverPage = location.pathname.startsWith('/driver');
 
   return (
     <>
       {showLogin ? <LoginPopup setShowLogin={setShowLogin} /> : <></>}
       <div className='app'>
-        <Navbar setShowLogin={setShowLogin} />
+        {!isDriverPage && <Navbar setShowLogin={setShowLogin} />}
         <Routes>
           <Route path='/' element={<Home />} />
           <Route path='/cart' element={<Cart />} />
@@ -39,7 +40,7 @@ const App = () => {
           <Route path='/search' element={<Search />} />
         </Routes>
       </div>
-      <Footer />
+      {!isDriverPage && <Footer />}
     </>
   )
 }
